@@ -14,7 +14,9 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Copy .env
-      run: cp /home/runner/envs/.env.ci ./.env.testing
+      run: |
+        cp /home/runner/envs/.env.ci ./.env.testing;
+        cp /home/runner/envs/.env ./.env;
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
     - name: Generate key
