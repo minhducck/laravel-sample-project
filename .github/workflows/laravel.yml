@@ -12,9 +12,6 @@ jobs:
     runs-on: 'digital-ocean'
 
     steps:
-    - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
-      with:
-        php-version: '8.1'
     - uses: actions/checkout@v4
     - name: Copy .env
       run: cp /home/runner/envs/.env.ci ./.env.testing
@@ -33,3 +30,5 @@ jobs:
       #  DB_CONNECTION: sqlite
       #  DB_DATABASE: database/database.sqlite
       run: php artisan test
+    - name: Test Coverage
+      run: XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-text
