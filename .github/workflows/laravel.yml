@@ -24,9 +24,15 @@ jobs:
     - name: Directory Permissions
       run: chmod -R 777 storage bootstrap/cache
 
+    - name: Drop db if exist
+      run: mysqladmin -h127.0.0.1 -u${{ secrets.CI_MYSQL_USER }} --password="${{ secrets.CI_MYSQL_PASSWORD }}" -f drop ${{ vars.CI_MYSQL_DB_NAME }} || true
     - name: Create Database
       run: |
         mysqladmin -h127.0.0.1 -u${{ secrets.CI_MYSQL_USER }} --password="${{ secrets.CI_MYSQL_PASSWORD }}" create ${{ vars.CI_MYSQL_DB_NAME }}
+    
+    - name: Migrate database
+      run: php artisan migrate
+    
     - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
       #env:
       #  DB_CONNECTION: sqlite
