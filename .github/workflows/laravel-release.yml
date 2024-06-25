@@ -1,0 +1,87 @@
+name: Publish new release
+
+on:
+  push:
+    tags:
+      - "release*"
+
+permissions:
+  contents: write
+
+jobs:
+  pull-code-and-install-deps:
+    runs-on: 'digital-ocean'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Copy .env
+        run: |
+          cp /home/runner/envs/.env.main.ci ./.env.testing;
+          cp /home/runner/envs/.env.main.ci ./.env;
+
+      - name: Replace phpunit config
+        run: |
+          cp /home/runner/envs/phpunits/phpunit-main.xml phpunit.xml
+
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+  unit-tests:
+    name: "Run PHP Unit Test"
+    runs-on: 'digital-ocean'
+    needs:
+      - pull-code-and-install-deps
+
+    steps:
+      - name: Create Database
+        run: mysqladmin -h127.0.0.1 -u${{ secrets.CI_MYSQL_USER }} --password="${{ secrets.CI_MYSQL_PASSWORD }}" create ${{ vars.CI_MYSQL_DB_NAME }} || true
+
+      - name: Execute db-migrate
+        run: php artisan migrate --force
+
+      - name: Execute db-seeds
+        run: php artisan db:seed --force
+
+      - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
+        run: composer run-script test
+
+  code-coverage:
+    name: 'Check code coverage'
+    runs-on: 'digital-ocean'
+    needs:
+      - unit-tests
+    steps:
+      - name: Run test coverage
+        run: composer run-script test:coverage > coverage-report.log
+
+  release-new-version:
+    name: "Generate release"
+    runs-on: 'digital-ocean'
+    needs:
+      - code-coverage
+    steps:
+      - name: 'release'
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            coverage-report.log
+
+  deploy:
+    name: "Deploy"
+    runs-on: 'digital-ocean'
+    steps:
+      - name: 'pull code'
+        working-directory: '${{ secrets.DEPLOY_DIR }}'
+        run: |
+          - git fetch origin ${{ github.event.release.tag_name }}
+          - git checkout ${{ github.event.release.tag_name }}
+
+      - name: 'apply-env'
+        working-directory: '${{ secrets.DEPLOY_DIR }}'
+        run: "cp ${{ secrets.ENV_PATH }} ./.env"
+      - name: 'db migrate'
+        working-directory: '${{ secrets.DEPLOY_DIR }}'
+        run: |
+          - php artisan migrate --force
+          - php artisan db:seed --force
