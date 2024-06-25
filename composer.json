@@ -9,7 +9,8 @@
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
-        "laravel/tinker": "^2.8"
+        "laravel/tinker": "^2.8",
+        "minhducck/key-value-data-storage": "dev-main"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
@@ -67,6 +68,12 @@
             "php-http/discovery": true
         }
     },
-    "minimum-stability": "stable",
-    "prefer-stable": true
+    "minimum-stability": "dev",
+    "prefer-stable": false,
+    "repositories": {
+        "key-value-storage": {
+            "type": "git",
+            "url": "git@github.com:minhducck/key-value-data-storage.git"
+        }
+    }
 }
