@@ -19,7 +19,8 @@
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^7.0",
         "orchestra/testbench": "^8.23",
-        "phpunit/phpunit": "^10.1",
+        "pestphp/pest-plugin-laravel": "^2.4",
+        "phpunit/phpunit": "10.5.17",
         "spatie/laravel-ignition": "^2.0"
     },
     "autoload": {
@@ -36,8 +37,8 @@
     },
     "scripts": {
         "check:convention": "./vendor/bin/phpstan",
-        "test": "./vendor/bin/phpunit",
-        "test:coverage": "XDEBUG_MODE=coverage  ./vendor/bin/phpunit --coverage-text",
+        "test": "./vendor/bin/pest",
+        "test:coverage": "XDEBUG_MODE=coverage  ./vendor/bin/pest --coverage --min=50",
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
