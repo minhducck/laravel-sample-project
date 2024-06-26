@@ -61,7 +61,7 @@ jobs:
       - unit-tests
     steps:
       - name: Run test coverage
-        run: composer run-script test:coverage > coverage-report.log
+        run: composer run-script test:coverage
 
   deploy:
     name: "Deploy"
