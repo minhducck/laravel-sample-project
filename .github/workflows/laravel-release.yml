@@ -76,14 +76,31 @@ jobs:
       - name: 'pull code'
         working-directory: '${{ secrets.DEPLOY_DIR }}'
         run: |
-          - git fetch origin ${{ github.ref_name }}
-          - git checkout ${{ github.ref_name }}
+          git fetch origin ${{ github.ref_name }}
+          git checkout ${{ github.ref_name }}
 
-      - name: 'apply-env'
+      - name: Install Dependencies
+        working-directory: '${{ secrets.DEPLOY_DIR }}'
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --optimize-autoloader --no-dev
+
+      - name: Apply Production ENV file
         working-directory: '${{ secrets.DEPLOY_DIR }}'
         run: "cp ${{ secrets.ENV_PATH }} ./.env"
-      - name: 'db migrate'
+
+      - name: Migrate DB artifact
         working-directory: '${{ secrets.DEPLOY_DIR }}'
         run: |
-          - php artisan migrate --force
-          - php artisan db:seed --force
+          php artisan migrate --force
+          php artisan db:seed --force
+
+      - name: Migrate DB artifact
+        working-directory: '${{ secrets.DEPLOY_DIR }}'
+        run: |
+          php artisan migrate --force
+          php artisan db:seed --force
+      - name: Essential commands
+        run: |
+          working-directory: '${{ secrets.DEPLOY_DIR }}'
+          php artisan config:cache
+          php artisan route:cache
+          php artisan optimize
