@@ -70,6 +70,8 @@ jobs:
   deploy:
     name: "Deploy"
     runs-on: 'digital-ocean'
+    needs:
+      - release-new-version
     steps:
       - name: 'pull code'
         working-directory: '${{ secrets.DEPLOY_DIR }}'
