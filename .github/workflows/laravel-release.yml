@@ -76,7 +76,7 @@ jobs:
       - name: 'pull code'
         working-directory: '${{ secrets.DEPLOY_DIR }}'
         run: |
-          git fetch origin ${{ github.ref_name }}
+          git fetch --tags origin ${{ github.ref_name }}
           git checkout ${{ github.ref_name }}
 
       - name: Install Dependencies
