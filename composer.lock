@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3c5e2bcc2d5bba1ed8c573e19c4457d3",
+    "content-hash": "d4d43b3edaf57554f4f05b8e4c1e72fa",
     "packages": [
         {
             "name": "brick/math",
@@ -1885,11 +1885,11 @@
         },
         {
             "name": "minhducck/key-value-data-storage",
-            "version": "0.0.2",
+            "version": "0.0.3",
             "source": {
                 "type": "git",
                 "url": "git@github.com:minhducck/key-value-data-storage.git",
-                "reference": "5eadd1f1c54a5c92adb78773a6508724fa21a2d6"
+                "reference": "24fd0ce2b93f5d4ebe40e913d7849a0f05728e31"
             },
             "require": {
                 "laravel/framework": "^10.0",
@@ -1942,7 +1942,7 @@
                 }
             ],
             "description": "A module that enables API to write/retrieve object based on key-value methodology.",
-            "time": "2024-06-25T18:28:20+00:00"
+            "time": "2024-06-25T20:25:37+00:00"
         },
         {
             "name": "monolog/monolog",
