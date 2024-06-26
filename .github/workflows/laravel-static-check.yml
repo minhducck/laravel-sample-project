@@ -61,4 +61,34 @@ jobs:
       - unit-tests
     steps:
       - name: Run test coverage
-        run: composer run-script test:coverage
+        run: composer run-script test:coverage > coverage-report.log
+
+  deploy:
+    name: "Deploy"
+    runs-on: 'digital-ocean'
+    needs:
+      - code-coverage
+    steps:
+      - name: 'pull code'
+        working-directory: '${{ secrets.DEPLOY_DIR }}'
+        run: |
+          git fetch origin ${{ github.ref_name }}
+          git reset --hard origin/${{ github.ref_name }}
+
+      - name: Install Dependencies
+        working-directory: '${{ secrets.DEPLOY_DIR }}'
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --optimize-autoloader
+
+      - name: Apply Production ENV file
+        working-directory: '${{ secrets.DEPLOY_DIR }}'
+        run: "cp ${{ secrets.ENV_PATH }} ./.env"
+
+      - name: Dump autoload
+        working-directory: '${{ secrets.DEPLOY_DIR }}'
+        run: composer dump-autoload
+
+      - name: Migrate DB artifact
+        working-directory: '${{ secrets.DEPLOY_DIR }}'
+        run: |
+          php artisan migrate --force
+          php artisan db:seed --force
