@@ -99,8 +99,8 @@ jobs:
           php artisan migrate --force
           php artisan db:seed --force
       - name: Essential commands
+        working-directory: '${{ secrets.DEPLOY_DIR }}'
         run: |
-          working-directory: '${{ secrets.DEPLOY_DIR }}'
           php artisan config:cache
           php artisan route:cache
           php artisan optimize
