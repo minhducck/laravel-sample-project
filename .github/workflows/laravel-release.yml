@@ -87,20 +87,12 @@ jobs:
         working-directory: '${{ secrets.DEPLOY_DIR }}'
         run: "cp ${{ secrets.ENV_PATH }} ./.env"
 
-      - name: Migrate DB artifact
+      - name: Dump autoload
         working-directory: '${{ secrets.DEPLOY_DIR }}'
-        run: |
-          php artisan migrate --force
-          php artisan db:seed --force
+        run: composer dump-autoload
 
       - name: Migrate DB artifact
         working-directory: '${{ secrets.DEPLOY_DIR }}'
         run: |
           php artisan migrate --force
           php artisan db:seed --force
-      - name: Essential commands
-        working-directory: '${{ secrets.DEPLOY_DIR }}'
-        run: |
-          php artisan config:cache
-          php artisan route:cache
-          php artisan optimize
