@@ -109,6 +109,10 @@ jobs:
 
           fi
           " > clone_or_ignore.sh;
+
+      - name: 'Run Clone'
+        shell: bash
+        run: |
           bash clone_or_ignore.sh || true;
 
       - name: 'pull code'
