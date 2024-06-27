@@ -97,22 +97,8 @@ jobs:
         run: |
           mkdir -p '${{ secrets.DEPLOY_DIR }}'
       - name: 'Clone if DEPLOY_DIR is empty'
-        shell: bash
         run: |
-          echo "
-          if [ ! -d ${{ secrets.DEPLOY_DIR }} ]
-          then
-            echo "Create DEPLOY_DIR";
-            mkdir -p ${{ secrets.DEPLOY_DIR }};
-            echo "Clone Source Code";
-            git clone https://github.com/minhducck/laravel-sample-project.git --branch main --single-branch ${{ secrets.DEPLOY_DIR }}
-
-          fi
-          " > clone_or_ignore.sh;
-
-      - name: 'Run Clone'
-        run: |
-          bash ./clone_or_ignore.sh || true;
+          git clone https://github.com/minhducck/laravel-sample-project.git --branch main --single-branch ${{ secrets.DEPLOY_DIR }} || true;
 
       - name: 'pull code'
         working-directory: '${{ secrets.DEPLOY_DIR }}'
