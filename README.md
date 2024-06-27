@@ -16,6 +16,8 @@
 > MariaDB 10.x
 > 
 > Composer version 2.x
+> 
+> Docker version 27.x
 
 
 [!IMPORTANT] Please upload setup `scripts` folder to server before execute the following steps. 
@@ -23,8 +25,8 @@
 ### Create web user
 ```shell
 #example user: runner.
-
-sudo bash ./scripts/create-web-user.sh runner;
+export WEB_USER=runner;
+sudo bash ./scripts/create-web-user.sh $WEB_USER;
 ```
 
 ### Install NGINX/PHP-FPM/MariaDB
@@ -33,13 +35,14 @@ sudo bash ./scripts/create-web-user.sh runner;
 export WEB_USER=runner; # PLEASE CHANGE
 export WEB_DOMAIN=laravel.duckonemorec.me; # PLEASE CHANGE
 
-sudo bash ./scripts/install-packages.sh \ 
-&& sudo bash ./scripts/configure-nginx.sh $WEB_USER $WEB_DOMAIN \
-&& sudo bash ./scripts/configure-fpm.sh $WEB_USER \
-&& sudo bash ./scripts/tuning.sh $WEB_USER
+export DB_USER="root"
+export DB_PASSWORD="duc"
+
+sudo bash ./scripts/install-packages.sh && sudo bash ./scripts/configure-nginx.sh $WEB_USER $WEB_DOMAIN && sudo bash ./scripts/configure-fpm.sh $WEB_USER && sudo bash ./scripts/tuning.sh $WEB_USER
+mysqladmin --user=$DB_USER password "$DB_PASSWORD" --host="127.0.0.1"
+mysqladmin --user=root password "" --host="localhost"
 ``` 
 [!IMPORTANT] Please change default password for root inside `mysql_root_setup.sql`
-
 [!IMPORTANT] Please create a MYSQL USER, PASSWORD, and database for production.
 
 ### Setup for CI/CD
@@ -49,7 +52,7 @@ sudo bash ./scripts/install-packages.sh \
 ```shell
 #!/bin/bash
 export RUNNER_USER=runner;
-export GITHUB_ACTION_TOKEN=ABSURTEBKPG65Y4PSWFRYB3GPVDVG
+export GITHUB_ACTION_TOKEN=[!REPLACE YOUR ACTION TOKEN HERE]
 
 sudo bash ./scripts/create-web-user.sh $RUNNER_USER;
 sudo bash ./scripts/install-docker.sh $RUNNER_USER;

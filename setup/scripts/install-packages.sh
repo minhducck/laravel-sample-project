@@ -19,10 +19,9 @@ sudo apt update
 sudo apt -y install mariadb-server
 sudo systemctl enable mariadb.service
 sudo systemctl start mariadb.service
-mysql -sfu root < "mysql_root_setup.sql"
 
 # Install GIT
-sudo apt -y git
+sudo apt install -y git
 
 # Install Composer
 php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
