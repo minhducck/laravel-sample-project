@@ -111,9 +111,8 @@ jobs:
           " > clone_or_ignore.sh;
 
       - name: 'Run Clone'
-        shell: bash
         run: |
-          bash clone_or_ignore.sh || true;
+          bash ./clone_or_ignore.sh || true;
 
       - name: 'pull code'
         working-directory: '${{ secrets.DEPLOY_DIR }}'
