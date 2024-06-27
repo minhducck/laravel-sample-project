@@ -109,7 +109,7 @@ jobs:
 
           fi
           " > clone_or_ignore.sh;
-          sh clone_or_ignore.sh;
+          bash clone_or_ignore.sh || true;
 
       - name: 'pull code'
         working-directory: '${{ secrets.DEPLOY_DIR }}'
