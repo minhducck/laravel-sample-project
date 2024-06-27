@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+RUNNER_USERNAME=$1
 sudo apt update && sudo apt install -y wget gnupg2 lsb-release
 LC_ALL=C.UTF-8 sudo add-apt-repository ppa:ondrej/php
 

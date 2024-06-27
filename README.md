@@ -50,10 +50,13 @@ sudo bash ./scripts/install-packages.sh \
 #!/bin/bash
 export RUNNER_USER=runner;
 export GITHUB_ACTION_TOKEN=ABSURTEBKPG65Y4PSWFRYB3GPVDVG
-sudo bash ./scripts/create-web-user.sh $RUNNER_USER;
-sudo bash ./scripts/setup-self-host-runner.sh $RUNNER_USER $GITHUB_ACTION_TOKEN;
 
-sudo -u $RUNNER_USER bash -c "/home/$RUNNER_USER/actions-runner/run.sh" & disown 
+sudo bash ./scripts/create-web-user.sh $RUNNER_USER;
+sudo bash ./scripts/install-docker.sh $RUNNER_USER;
+sudo bash ./scripts/setup-self-host-runner.sh $RUNNER_USER $GITHUB_ACTION_TOKEN;
+cd /home/$RUNNER_USER/actions-runner/;
+sudo ./svc.sh install $RUNNER_USER
+sudo ./svc.sh start 
 ```
 
 ### Prepare env files on server:

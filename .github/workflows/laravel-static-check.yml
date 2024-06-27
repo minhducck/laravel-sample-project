@@ -102,9 +102,10 @@ jobs:
           echo "
           if [ ! -d ${{ secrets.DEPLOY_DIR }} ]
           then
-            git clone https://github.com/minhducck/laravel-sample-project.git --branch main --single-branch ${{ secrets.DEPLOY_DIR }}
             echo "Create DEPLOY_DIR";
-            mkdir -p /home/runner/www
+            mkdir -p ${{ secrets.DEPLOY_DIR }};
+            echo "Clone Source Code";
+            git clone https://github.com/minhducck/laravel-sample-project.git --branch main --single-branch ${{ secrets.DEPLOY_DIR }}
 
           fi
           " > clone_or_ignore.sh;
