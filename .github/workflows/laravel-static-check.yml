@@ -22,6 +22,8 @@ jobs:
       - name: Replace phpunit config
         run: |
           cp /home/runner/envs/phpunits/phpunit-main.xml phpunit.xml
+      - name: "Setup custom GitHub token for composer"
+        run: composer config --global github-oauth.github.com ${{ secrets.CUSTOM_GITHUB_TOKEN }}
 
       - name: Install Dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
@@ -91,6 +93,23 @@ jobs:
     needs:
       - code-coverage
     steps:
+      - name: 'Create webroot folder'
+        run: |
+          mkdir -p '${{ secrets.DEPLOY_DIR }}'
+      - name: 'Clone if DEPLOY_DIR is empty'
+        shell: bash
+        run: |
+          echo "
+          if [ ! -d ${{ secrets.DEPLOY_DIR }} ]
+          then
+            git clone https://github.com/minhducck/laravel-sample-project.git --branch main --single-branch ${{ secrets.DEPLOY_DIR }}
+            echo "Create DEPLOY_DIR";
+            mkdir -p /home/runner/www
+
+          fi
+          " > clone_or_ignore.sh;
+          sh clone_or_ignore.sh;
+
       - name: 'pull code'
         working-directory: '${{ secrets.DEPLOY_DIR }}'
         run: |
