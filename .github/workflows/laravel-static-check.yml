@@ -3,8 +3,10 @@ on:
   push:
     branches: ['main']
 
-  pull_request:
-    branches: ['*']
+permissions:
+  contents: write
+  packages: write
+  pull-requests: write
 
 jobs:
   pull-code-and-install-deps:
